@@ -10,7 +10,7 @@ module primes
             ! local data
             integer (kind=16) :: i, supremum
             ! processing
-            supremum = int(sqrt(real(n)))
+            supremum = int(sqrt(real(n)), 16)
             sd = n
             if (modulo(n, 2_16) .eq. 0) then
                 sd = 2
