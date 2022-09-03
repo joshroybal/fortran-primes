@@ -17,13 +17,14 @@ module primes
             else if (modulo(n, 3_16) .eq. 0) then
                 sd = 3
             else
-                do i = 5, supremum, 6
+                i = 5
+                do while (sd .eq. n .and. i .le. supremum)
                     if (modulo(n, i) .eq. 0) then
                         sd = i
                     else if (modulo(n, i+2) .eq. 0) then
                         sd = i+2
                     end if
-                    if (sd .ne. n) exit
+                    i = i+6
                 end do
             end if
         end function smallest_divisor
@@ -35,9 +36,9 @@ module primes
             ! function result location
             logical :: res
             ! local data
-            integer (kind=16) :: i, supremum
+            integer (kind=16) :: i
             ! processing
-            if (n .le. 1 .or. smallest_divisor(n) .ne. n) then
+            if (n .le. 1_16 .or. smallest_divisor(n) .ne. n) then
                 res = .false.
             else
                 res = .true.
@@ -64,7 +65,7 @@ module primes
             ! dummy argument
             integer (kind=16), intent (in) :: n
             ! function result location
-            character (len=41) :: string
+            character (len=48) :: string
             ! processing
             write (string,*) n
             string = adjustl(string)
@@ -75,38 +76,24 @@ module primes
             ! dummy argument
             integer (kind=16), intent(in) :: n
             ! local data
-            integer (kind=16) :: i, div, sd
+            integer (kind=16) :: factor, rest
             ! processing
             write (*,1000,advance='no') trim(write_to_string(n))//':'
 
-            div = n
-            do while (modulo(div, 2_16) .eq. 0)
-                write (*,1000,advance='no') trim(write_to_string(2_16))
-                div = div/2
-            end do
-
-            do while (modulo(div, 3_16) .eq. 0)
-                write (*,1000,advance='no') trim(write_to_string(3_16))
-                div = div/3
-            end do
-
-            i = 5
-            do while (i*i .le. div)
-                do while (modulo(div, i) .eq. 0)
-                    div = div/i
-                    write (*,1000,advance='no') trim(write_to_string(i))
+            if (n .gt. 1) then
+                factor = smallest_divisor(n)
+                rest = n/factor;
+                write (*,1000,advance='no') trim(write_to_string(factor))
+                do while ((rest .ne. 1) .and. (prime(rest) .neqv. .true.))
+                    factor = smallest_divisor(rest)
+                    write (*,1000,advance='no') trim(write_to_string(factor))
+                    rest = rest/factor
                 end do
-                do while (modulo(div, i+2) .eq. 0)
-                    div = div/(i+2)
-                    write (*,1000,advance='no') trim(write_to_string(i))
-                end do
-                i = i+6
-            end do
-
-            if (div .gt. 2) then
-                write (*,1000) trim(write_to_string(div))
-            else
-                write (*,*)
+                if (prime(rest)) then
+                    write (*,1000) trim(write_to_string(rest))
+                else
+                    write (*,*)
+                end if
             end if
 
             1000 format (1X,A)
