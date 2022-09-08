@@ -65,7 +65,7 @@ module primes
             ! dummy argument
             integer (kind=16), intent (in) :: n
             ! function result location
-            character (len=48) :: string
+            character (len=41) :: string
             ! processing
             write (string,*) n
             string = adjustl(string)
@@ -84,7 +84,7 @@ module primes
                 factor = smallest_divisor(n)
                 rest = n/factor;
                 write (*,1000,advance='no') trim(write_to_string(factor))
-                do while ((rest .ne. 1) .and. (prime(rest) .neqv. .true.))
+                do while ((rest .ne. 1) .and. (.not. prime(rest)))
                     factor = smallest_divisor(rest)
                     write (*,1000,advance='no') trim(write_to_string(factor))
                     rest = rest/factor
