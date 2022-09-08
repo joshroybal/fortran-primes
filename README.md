@@ -1,7 +1,7 @@
 # fortran-primes
 Factorize integers 2_16 &lt;= z &lt;= 2_16**127<br>
-driver.exe or ./driver output
 Sample of final portion of test output.<br>
+driver.exe or ./driver<br>
 <pre>
 . . .
  154015462581854: 2 77007731290927
